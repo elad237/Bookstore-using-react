@@ -2,7 +2,7 @@
 
 <div align="center">
 
-  <img src="bookstore.png" alt="logo" width="340"  height="auto" />
+  <img src="bookstore.png" alt="logo" width="400"  height="auto" />
   <br/>
 
   <h1><b>Bookstore App using react</b></h1>
