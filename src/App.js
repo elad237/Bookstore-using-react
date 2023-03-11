@@ -1,25 +1,20 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from 'react-router-dom';
-import Books from './components/Books';
-import Categories from './components/Categories';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from './components/Navbar';
+import './App.css';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import NavBar from './components/Navbar';
+import BooksPage from './pages/BooksPage';
+import CategoryPage from './pages/CategoryPage';
 
-function App() {
-  return (
-    <Router>
-      <div className="container border shadow mt-5">
-        <Navbar />
-        <Switch>
-          <Route exact path="/" component={Books} />
-          <Route exact path="/categories" component={Categories} />
-        </Switch>
-      </div>
-    </Router>
-  );
-}
+const App = () => (
+  <div className="App">
+    <section className="book-app">
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<BooksPage />} />
+        <Route path="caterogyPage" element={<CategoryPage />} />
+      </Routes>
+    </section>
+  </div>
+);
 
 export default App;

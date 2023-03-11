@@ -1,18 +1,31 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
-const Navbar = () => (
-  <ul className="nav">
-    <li className="nav-item">
-      <a href="/" className="nav-link">BOOKSTORE CMS</a>
-    </li>
-    <li className="nav-item">
-      <NavLink className="nav-link" to="/" exact>New books</NavLink>
-    </li>
-    <li className="nav-item">
-      <NavLink className="nav-link" to="/categories" exact>Categories</NavLink>
-    </li>
-  </ul>
-);
+function NavBar() {
+  return (
+    <div>
+      <header className="header">
+        <nav className="nav-bar">
+          <ul className="nav-links">
+            <li className="logo">Bookstore CMS</li>
+            <Link to="/">
+              <li className="book-cat">BOOKS</li>
+            </Link>
+            <Link to="/caterogyPage">
+              <li className="book-cat">CATEGORIES</li>
+            </Link>
+          </ul>
+          <div className="avatar">
+            <span>
+              <FontAwesomeIcon className="user-circle" icon={faUserCircle} />
+            </span>
+          </div>
+        </nav>
+      </header>
+    </div>
+  );
+}
 
-export default Navbar;
+export default NavBar;
