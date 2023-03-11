@@ -8,8 +8,8 @@ const SingleBook = ({ book }) => {
     <div>
       <li className="list-group-item d-flex justify-content-between align-items-start">
         <div className="ms-2 me-auto">
-          <div className="fw-bold">{book.title}</div>
-          {book.author}
+          <div className="fw-bold">{books.title}</div>
+          {books.author}
         </div>
         <button type="button" className="btn btn-sm btn-link" onClick={() => dispatch(removeBooks(book.item_id))}>Remove Book</button>
       </li>
