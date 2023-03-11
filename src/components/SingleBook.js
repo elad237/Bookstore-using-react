@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { removeBooks } from '../redux/books/books';
+import { removeBooks } from './redux/books/books';
 
 const SingleBook = ({ book }) => {
   const dispatch = useDispatch();
