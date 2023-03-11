@@ -1,9 +1,8 @@
 body {
-  padding: 5%;
-  background-color: #f5f6fa;
+  background-color: aliceblue;
 }
 
-* {
-  margin: 0;
-  padding: 0;
+.active {
+  font-weight: bolder;
+  color: #0d6efd;
 }
