@@ -1,43 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { getBooks } from '../redux/books/books';
 import Book from './Book';
 import Inputs from './Inputs';
 
-const listBooks = [
-  {
-    id: 1,
-    title: 'The Hunger Games',
-    author: 'Suzanne Collins',
-    category: 'Action',
-  },
-  {
-    id: 2,
-    title: 'Dune',
-    author: 'Frank Herbert',
-    category: 'Science Fiction',
-  },
-  {
-    id: 3,
-    title: 'Capital in the Twenty-First Century',
-    author: 'Suzanne Collins',
-    category: 'Economy',
-  },
-];
+const Books = () => {
+  const dispatch = useDispatch();
 
-const Books = () => (
-  <div className="books-container">
-    <ul className="books">
-      {listBooks.map((book) => (
-        <Book
-          title={book.title}
-          author={book.author}
-          category={book.category}
-          key={book.id}
-        />
-      ))}
-    </ul>
-    <div className="horizontal-divider" />
-    <Inputs />
-  </div>
-);
+  useEffect(() => {
+    dispatch(getBooks());
+  }, [dispatch]);
+  const books = useSelector((state) => state.books, shallowEqual);
+  return (
+    <div className="books-container">
+      <ul className="books">
+        {books.map((book) => (
+          <Book
+            title={book.title}
+            author={book.author}
+            category={book.category}
+            id={book.item_id}
+            key={book.item_id}
+          />
+        ))}
+      </ul>
+      <div className="horizontal-divider" />
+      <Inputs />
+    </div>
+  );
+};
 
 export default Books;
