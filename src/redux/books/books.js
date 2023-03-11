@@ -1,67 +1,33 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import { removeBookFromApi, saveBookToApi } from '../apiCalls';
 
-// Actions
-const ADD = 'bookstore-react/booksReducer/ADD';
-const REMOVE = 'bookstore-react/booksReducer/REMOVE';
-const GET = 'bookstore-react/booksReducer/GET';
+export const setBooks = (books) => ({
+  type: 'SET_BOOKS',
+  payload: books,
+});
 
-// API URL
-const url = 'https://us-central1-bookstore-api-e63c8.cloudfunctions.net/bookstoreApi/apps/xKgONp1vYVZJzmgq5zMK/books';
-
-// Reducer
-export default function booksReducer(state = [], action) {
+export const addBooks = (book) => ({
+  type: 'ADD_BOOKS',
+  payload: book,
+});
+export const removeBooks = (id) => ({
+  type: 'REMOVE_BOOKS',
+  payload: id,
+});
+export const booksReducers = (state = [], action) => {
   switch (action.type) {
-    case `${ADD}/fulfilled`:
-      return state.concat(action.meta.arg);
-    case `${REMOVE}/fulfilled`:
-      return state.filter((book) => book.item_id !== action.meta.arg);
-    case `${GET}/fulfilled`:
-      return Object.keys(action.payload).map((key) => {
-        const { title, author, category } = action.payload[key][0];
-        return {
-          item_id: key,
-          title,
-          author,
-          category,
-        };
-      });
-    default: return state;
+    case 'ADD_BOOKS':
+      saveBookToApi(action.payload);
+      return [...state, action.payload];
+    case 'REMOVE_BOOKS':
+      removeBookFromApi(action.payload);
+      return state.filter((book) => book.item_id !== action.payload);
+    case 'SET_BOOKS':
+      return action.payload;
+    default:
+      return state;
   }
-}
-
-// Action Creators
-export const addBook = (book) => ({
-  type: ADD,
-  book,
-});
-
-export const removeBook = (book) => ({
-  type: REMOVE,
-  book,
-});
-
-// API requests
-export const getBooks = createAsyncThunk(GET, async () => {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-});
-
-export const createBook = createAsyncThunk(ADD, async (book) => {
-  await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(book),
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-    },
-  });
-});
-
-export const deleteBook = createAsyncThunk(REMOVE, async (itemId) => {
-  await fetch(`${url}/${itemId}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+};
+export const rootReducers = combineReducers({
+  books: booksReducers,
 });
