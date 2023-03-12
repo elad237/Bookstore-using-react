@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import '../styles/NavBar.css';
 import UserIcon from '../icons/userIcon';
 
@@ -24,7 +24,6 @@ const NavBar = () => (
         <UserIcon />
       </div>
     </div>
-    <Outlet />
   </div>
 );
 
