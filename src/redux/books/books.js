@@ -1,67 +1,55 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import BookSrvc from '../../services/BookSrvc';
 
-// Actions
-const ADD = 'bookstore-react/booksReducer/ADD';
-const REMOVE = 'bookstore-react/booksReducer/REMOVE';
-const GET = 'bookstore-react/booksReducer/GET';
+const initialState = {
+  books: [],
+};
 
-// API URL
-const url = 'https://us-central1-bookstore-api-e63c8.cloudfunctions.net/bookstoreApi/apps/xKgONp1vYVZJzmgq5zMK/books';
+const fetchBooks = createAsyncThunk(
+  'books/fetchBooks',
+  async () => {
+    const { data } = await BookSrvc.getSrvc();
+    return Object.keys(data).map((key) => ({ ...data[key][0], item_id: key }));
+  },
+);
 
-// Reducer
-export default function booksReducer(state = [], action) {
+const addBook = createAsyncThunk(
+  'books/addBook',
+  async (Book) => {
+    const response = await BookSrvc.addSrvc(Book);
+    return response.data;
+  },
+);
+
+const deleteBook = createAsyncThunk(
+  'books/deleteBook',
+  async (id) => {
+    await BookSrvc.deleteSrvc(id);
+    return id;
+  },
+);
+
+const booksSlice = (state = initialState, action) => {
   switch (action.type) {
-    case `${ADD}/fulfilled`:
-      return state.concat(action.meta.arg);
-    case `${REMOVE}/fulfilled`:
-      return state.filter((book) => book.item_id !== action.meta.arg);
-    case `${GET}/fulfilled`:
-      return Object.keys(action.payload).map((key) => {
-        const { title, author, category } = action.payload[key][0];
-        return {
-          item_id: key,
-          title,
-          author,
-          category,
-        };
-      });
-    default: return state;
+    case 'books/fetchBooks/fulfilled':
+      return {
+        ...state,
+        books: action.payload,
+      };
+    case addBook.fulfilled:
+      return {
+        ...state,
+        books: [...state.books, action.payload],
+      };
+    case deleteBook.fulfilled:
+      return {
+        ...state,
+        books: state.books.filter((book) => book.id !== action.payload),
+      };
+    default:
+      return state;
   }
-}
+};
 
-// Action Creators
-export const addBook = (book) => ({
-  type: ADD,
-  book,
-});
-
-export const removeBook = (book) => ({
-  type: REMOVE,
-  book,
-});
-
-// API requests
-export const getBooks = createAsyncThunk(GET, async () => {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-});
-
-export const createBook = createAsyncThunk(ADD, async (book) => {
-  await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(book),
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-    },
-  });
-});
-
-export const deleteBook = createAsyncThunk(REMOVE, async (itemId) => {
-  await fetch(`${url}/${itemId}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-});
+export { addBook, deleteBook, fetchBooks };
+export default booksSlice;

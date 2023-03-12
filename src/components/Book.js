@@ -1,47 +1,30 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { deleteBook } from '../redux/books/books';
+import PropTypes from 'prop-types';
+import { deleteBook, fetchBooks } from '../redux/books/books';
 
 const Book = (props) => {
-  const {
-    id, title, author, category,
-  } = props;
-
+  // eslint-disable-next-line camelcase
+  const { item_id, title, author } = props;
   const dispatch = useDispatch();
+
+  const handleClick = async () => {
+    await dispatch(deleteBook(item_id));
+    await dispatch(fetchBooks());
+  };
   return (
     <li>
-      <div className="book">
-        <div className="book-content">
-          <div className="book-info">
-            <h4 className="book-category">{category}</h4>
-            <h2 className="book-title">{title}</h2>
-            <h6 className="book-author">{author}</h6>
-            <div className="action-buttons">
-              <button className="button-outline" type="button">Comments</button>
-              <div className="vertical-divider" />
-              <button
-                className="button-outline"
-                type="button"
-                onClick={() => dispatch(deleteBook(id))}
-              >
-                Remove
-              </button>
-              <div className="vertical-divider" />
-              <button className="button-outline" type="button">Edit</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <h2>{title}</h2>
+      <p>{author}</p>
+      <button type="button" onClick={handleClick}>Remove</button>
     </li>
   );
 };
 
+export default Book;
+
 Book.propTypes = {
-  id: PropTypes.string.isRequired,
+  item_id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  category: PropTypes.string.isRequired,
 };
-
-export default Book;

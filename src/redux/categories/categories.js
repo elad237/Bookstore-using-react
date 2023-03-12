@@ -1,20 +1,22 @@
-// Actions
-const CHECK = 'bookstore-react/categoriesReducer/CHECK';
+const CHECK_STATUS = 'bookstore/books/CHECK_STATUS';
 
-// Reducer
-export default function categoriesReducer(state = [], action) {
-  switch (action.type) {
-    case CHECK:
-      return [
-        ...state,
-        'Under Construction',
-      ];
-    default: return state;
-  }
+const initialState = {
+  categories: [],
+};
+
+export function checkStatus() {
+  return {
+    type: CHECK_STATUS,
+    payload: 'Under construction',
+  };
 }
 
-// Action Creators
-export const checkStatus = (book) => ({
-  type: CHECK,
-  book,
-});
+export default function categoriesSlice(state = initialState, action) {
+  switch (action.type) {
+    case CHECK_STATUS:
+      // eslint-disable-next-line
+      return window.alert(action.payload);
+    default:
+      return state;
+  }
+}
