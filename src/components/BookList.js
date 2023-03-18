@@ -15,9 +15,11 @@ const BookList = () => {
   }, [dispatch]);
 
   return (
-    <ul>
-      {list}
-    </ul>
+    <section className="container-fluid p-5">
+      <ul className="row gap-3">
+        {list}
+      </ul>
+    </section>
   );
 };
 
